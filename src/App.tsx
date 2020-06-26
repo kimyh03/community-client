@@ -1,9 +1,10 @@
 import React from "react";
+import { ThemeProvider } from "styled-components";
+import GlobalStyles from "./Styles/GlobalStyles";
+import Theme from "./Styles/Theme";
 
-const App = () => (
-  <div>
-    <h2>My first Apollo app </h2>
-  </div>
+export default () => (
+  <ThemeProvider theme={Theme}>
+    <GlobalStyles />
+  </ThemeProvider>
 );
-
-export default App;
