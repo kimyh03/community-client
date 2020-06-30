@@ -16,6 +16,7 @@ export default createGlobalStyle`
         max-width:1200px;
         margin: 0;
         margin: auto;
+        height:100%;
     }
     a {
         color:${(props) => props.theme.blueColor};
