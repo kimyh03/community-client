@@ -1,13 +1,14 @@
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
 import CharityBox from "./CharityBox";
 import Footer from "./Footer";
 import Header from "./Header";
-import Router from "./Router";
+import Routes from "./Routes";
 import UserBox from "./UserBox";
 
 const Grid = styled.div`
@@ -16,16 +17,14 @@ const Grid = styled.div`
   max-width: 1200px;
   height: 1000px;
   display: grid;
-  grid-template-columns: 950px 240px;
-  column-gap: 10px;
+  grid-template-columns: 950px 230px;
+  column-gap: 20px;
 `;
 
 const ColumnWrapper = styled.div`
   margin: 0 auto;
   width: 100%;
-  max-width: 1200px;
   height: 1000px;
-  justify-content: flex-end;
 `;
 
 const GET_ISLOGGEDIN = gql`
@@ -40,15 +39,19 @@ export default () => {
     <ThemeProvider theme={Theme}>
       <>
         <GlobalStyles />
-        <Header />
-        <Grid>
-          <Router isLoggedIn={data?.isLoggedIn} />
-          <ColumnWrapper>
-            <UserBox isLoggedIn={data?.isLoggedIn} />
-            <CharityBox />
-          </ColumnWrapper>
-        </Grid>
-        <Footer />
+        <Router>
+          <Header />
+          <Grid>
+            <ColumnWrapper>
+              <Routes isLoggedIn={data?.isLoggedIn} />
+            </ColumnWrapper>
+            <ColumnWrapper>
+              <UserBox isLoggedIn={data?.isLoggedIn} />
+              <CharityBox />
+            </ColumnWrapper>
+          </Grid>
+          <Footer />
+        </Router>
       </>
     </ThemeProvider>
   );
