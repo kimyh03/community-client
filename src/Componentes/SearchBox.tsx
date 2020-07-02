@@ -5,35 +5,32 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 370px;
-  height: 50px;
+  width: 100%;
+  max-width: 500px;
+  height: 40px;
   border: solid 3px #ec6a36;
 `;
-const SearchInput = styled.input`
+
+const Input = styled.input`
   border: none;
+  width: 80%;
   height: 100%;
-  width: 100%;
+  padding: 10px;
+  opacity: 0.7;
+  font-size: 15px;
 `;
-const SearchButtonContainer = styled.div`
-  width: 50px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const SearchButton = styled.button`
+
+const Button = styled.button`
   color: white;
+  width: 20%;
   height: 100%;
-  width: 100%;
   background: ${(props) => props.theme.carrotColor};
   border: none;
 `;
 
 export default () => (
   <Container>
-    <SearchInput placeholder="검색어를 입력하세요" />
-    <SearchButtonContainer>
-      <SearchButton>검색</SearchButton>
-    </SearchButtonContainer>
+    <Input placeholder="검색어를 입력하세요" />
+    <Button>검색</Button>
   </Container>
 );
