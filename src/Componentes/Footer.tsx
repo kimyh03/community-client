@@ -9,7 +9,15 @@ const Footer = styled.footer`
   font-weight: 600;
   font-size: 12px;
   padding: 50px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0;
+  margin: auto;
+`;
+
+const Wrapper = styled.div`
   border-top: 1px solid #d2d6dc;
+  width: 100%;
 `;
 
 const List = styled.ul`
@@ -31,12 +39,14 @@ const Copyright = styled.span`
 `;
 
 export default () => (
-  <Footer>
-    <List>
-      <ListItem>
-        <Link href="#">Hoony@hobby.com</Link>
-      </ListItem>
-    </List>
-    <Copyright>Hobbydotcom {new Date().getFullYear()} &copy;</Copyright>
-  </Footer>
+  <Wrapper>
+    <Footer>
+      <List>
+        <ListItem>
+          <Link href="#">Hoony@hobby.com</Link>
+        </ListItem>
+      </List>
+      <Copyright>Hobbydotcom {new Date().getFullYear()} &copy;</Copyright>
+    </Footer>
+  </Wrapper>
 );
