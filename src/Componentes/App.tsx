@@ -8,11 +8,13 @@ import Theme from "../Styles/Theme";
 import CharityBox from "./CharityBox";
 import Footer from "./Footer";
 import Header from "./Header";
+import LoggedInUserBox from "./LoggedInUserBox";
+import LoggedOutUserBox from "./LoggedOutUserBox";
 import Routes from "./Routes";
-import UserBox from "./UserBox";
 
 const Grid = styled.div`
-  margin: 0 auto;
+  margin: 0;
+  margin: auto;
   width: 100%;
   max-width: 1200px;
   height: 1000px;
@@ -22,7 +24,7 @@ const Grid = styled.div`
 `;
 
 const ColumnWrapper = styled.div`
-  margin: 0 auto;
+  margin: 10px 0;
   width: 100%;
   height: 1000px;
 `;
@@ -46,7 +48,7 @@ export default () => {
               <Routes isLoggedIn={data?.isLoggedIn} />
             </ColumnWrapper>
             <ColumnWrapper>
-              <UserBox isLoggedIn={data?.isLoggedIn} />
+              {data?.isLoggedIn ? <LoggedInUserBox /> : <LoggedOutUserBox />}
               <CharityBox />
             </ColumnWrapper>
           </Grid>
