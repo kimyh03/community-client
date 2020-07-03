@@ -44,9 +44,9 @@ interface IProps {
   id: string;
   userName: string;
   title: string;
-  viewCount: string;
-  likeCount: string;
-  commentCount: string;
+  viewCount: any;
+  likeCount: any;
+  commentCount: any;
   createdAt: string;
 }
 
@@ -58,7 +58,7 @@ const PostList: React.FunctionComponent<IProps> = (props) => (
       <Item>{`(${props.commentCount})`}</Item>
     </CoulmnItemLarge>
     {props.userName === "Hoony" ? (
-      <CoulmnItemMiddle>👑{props.userName}</CoulmnItemMiddle>
+      <CoulmnItemMiddle>{props.userName}</CoulmnItemMiddle>
     ) : (
       <CoulmnItemMiddle>{props.userName}</CoulmnItemMiddle>
     )}

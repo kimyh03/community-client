@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 import React from "react";
 import { withRouter } from "react-router-dom";
 import Loader from "src/Componentes/Loader";
+import PostCoulmn from "src/Componentes/PostCoulmn";
 import PostList from "src/Componentes/PostList";
 import styled from "styled-components";
 
@@ -57,33 +58,6 @@ const Container = styled.div`
   max-height: 650px;
 `;
 
-const Coulmn = styled.div`
-  background: #fafafa;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-bottom: ${(props) => props.theme.boxBorder};
-`;
-
-const CoulmnItemSmall = styled.div`
-  opacity: 0.7;
-  text-align: center;
-  width: 8%;
-`;
-
-const CoulmnItemMiddle = styled.div`
-  opacity: 0.7;
-  text-align: center;
-  width: 17%;
-`;
-
-const CoulmnItemLarge = styled.div`
-  width: 55%;
-  text-align: center;
-  opacity: 0.7;
-`;
-
 const Title = styled.div`
   font-size: 30px;
   font-weight: 700;
@@ -109,19 +83,12 @@ export default withRouter(
         variables: { categoryTitle: category, page: PAGE }
       }
     );
-    console.log(data);
+
     return (
       <>
         <Title>{category}</Title>
         <Container>
-          <Coulmn>
-            <CoulmnItemSmall>글번호</CoulmnItemSmall>
-            <CoulmnItemLarge>제목</CoulmnItemLarge>
-            <CoulmnItemMiddle>작성자</CoulmnItemMiddle>
-            <CoulmnItemMiddle>작성일</CoulmnItemMiddle>
-            <CoulmnItemSmall>조회수</CoulmnItemSmall>
-            <CoulmnItemSmall>추천수</CoulmnItemSmall>
-          </Coulmn>
+          <PostCoulmn />
           <PostContainer>
             {loading ? (
               <Loader />
