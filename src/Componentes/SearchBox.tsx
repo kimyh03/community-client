@@ -26,6 +26,11 @@ const Button = styled.button`
   height: 100%;
   background: ${(props) => props.theme.carrotColor};
   border: none;
+  opacity: 1;
+  transition: ease-in 0.1s;
+  :hover {
+    opacity: 0.7;
+  }
 `;
 
 export default () => (
