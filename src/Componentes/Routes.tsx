@@ -20,7 +20,7 @@ const AppRouter: React.SFC<IProps> = (props) => (
       component={Category}
     />
     <Route path={"/post/:post"} exact={true} component={Post} />
-    <Route path={"/user/:username"} exact={true} component={Profile} />
+    <Route path={"/user/:nickname"} exact={true} component={Profile} />
   </Switch>
 );
 
