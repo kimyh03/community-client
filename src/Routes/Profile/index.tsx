@@ -6,21 +6,30 @@ import Loader from "src/Componentes/Loader";
 import PostCoulmn from "src/Componentes/PostCoulmn";
 import PostList from "src/Componentes/PostList";
 import ProfileCard from "src/Componentes/ProfileCard";
-// import useButton from "src/Hooks/UseButton";
+import useButton from "src/Hooks/UseButton";
 import styled from "styled-components";
 
-const Container = styled.div`
+const PostContainer = styled.div`
   background: white;
   border: ${(props) => props.theme.boxBorder};
   border-radius: 7px;
   height: 100%;
   max-height: 650px;
   margin-top: 100px;
-`;
-
-const PostContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+const Button = styled.button<{ isClicked: boolean }>`
+  width: 50%;
+  height: 40px;
+  border: ${(props) => props.theme.boxBorder};
+  opacity: ${(props) => (props.isClicked ? 0.6 : 0.9)};
+  font-weight: ${(props) => (props.isClicked ? 800 : 500)};
+  color: ${(props) => (props.isClicked ? props.theme.carrotColor : "black")};
 `;
 
 interface BookmarkedPosts {
@@ -118,6 +127,13 @@ export default withRouter(
     const { loading, data } = useQuery<GetUserProfile>(GET_USER_PROFILE, {
       variables: { nickname }
     });
+    const { value, onClick } = useButton("myPosts");
+    let postList;
+    if (value === "myPosts") {
+      postList = data?.getUserProfile.user.posts;
+    } else {
+      postList = data?.getUserProfile.user.bookmarkedPosts;
+    }
     return (
       <>
         {loading ? (
@@ -135,23 +151,37 @@ export default withRouter(
                 favCategories={data.getUserProfile.user.favCategories}
               />
             )}
-            <Container>
+            <PostContainer>
+              <ButtonContainer>
+                <Button
+                  value={"myPosts"}
+                  onClick={onClick}
+                  isClicked={value === "myPosts"}
+                >
+                  내가 쓴 글
+                </Button>
+                <Button
+                  value={"bookmarkedPosts"}
+                  onClick={onClick}
+                  isClicked={value === "bookmarkedPosts"}
+                >
+                  북마크
+                </Button>
+              </ButtonContainer>
               <PostCoulmn />
-              <PostContainer>
-                {data?.getUserProfile.user.posts.map((post) => (
-                  <PostList
-                    key={post.id}
-                    id={post.id}
-                    userName={post.userName}
-                    title={post.title}
-                    viewCount={post.viewCount}
-                    likeCount={post.likeCount}
-                    commentCount={post.commentCount}
-                    createdAt={post.createdAt}
-                  />
-                ))}
-              </PostContainer>
-            </Container>
+              {postList?.map((post) => (
+                <PostList
+                  key={post.id}
+                  id={post.id}
+                  userName={post.userName}
+                  title={post.title}
+                  viewCount={post.viewCount}
+                  likeCount={post.likeCount}
+                  commentCount={post.commentCount}
+                  createdAt={post.createdAt}
+                />
+              ))}
+            </PostContainer>
           </>
         )}
       </>
