@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -24,16 +24,21 @@ const GET_ME = gql`
   }
 `;
 
+const LOCAL_LOG_USER_OUT = gql`
+  mutation logUserOut {
+    logUserOut @client
+  }
+`;
+
 const Container = styled.div`
   width: 100%;
-  height: 120px;
+  height: 130px;
   margin: 10px 0;
+  padding-top: 10px;
   background: white;
   border: ${(props) => props.theme.boxBorder};
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  justify-items: center;
 `;
 
 const Title = styled.div`
@@ -51,7 +56,7 @@ const Nickname = styled.span`
 
 const Button = styled.button`
   width: 80%;
-  height: 25px;
+  height: 30px;
   margin: 5px 0;
   background: ${(props) => props.theme.carrotColor};
   color: white;
@@ -68,9 +73,9 @@ const Button = styled.button`
 `;
 
 const Wrapper = styled.div`
-  margin: 15px 0;
   display: flex;
   justify-content: center;
+  height: 40%;
 `;
 
 const SLink = styled(Link)`
@@ -79,8 +84,26 @@ const SLink = styled(Link)`
   justify-content: center;
 `;
 
+const AuthMenu = styled.div`
+  color: ${(props) => props.theme.darkGreyColor};
+  font-size: 11px;
+  margin: 10px 15px 0 0;
+  align-self: flex-end;
+  justify-self: flex-end;
+  cursor: pointer;
+`;
+
 const LoggedInUserBox: React.FunctionComponent = () => {
   const { loading, data } = useQuery<GetMeResponse>(GET_ME);
+  const [localLogOut] = useMutation(LOCAL_LOG_USER_OUT);
+
+  const onClick = async () => {
+    try {
+      await localLogOut();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <>
@@ -99,6 +122,7 @@ const LoggedInUserBox: React.FunctionComponent = () => {
             <SLink to={`/user/${data?.getMe.nickname}`}>
               <Button>내피드</Button>
             </SLink>
+            <AuthMenu onClick={onClick}>로그아웃</AuthMenu>
           </>
         )}
       </Container>
