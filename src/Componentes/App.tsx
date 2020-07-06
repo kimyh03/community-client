@@ -17,7 +17,7 @@ const Grid = styled.div`
   margin: auto;
   width: 100%;
   max-width: 1200px;
-  height: 1000px;
+  min-height: 1100px;
   display: grid;
   grid-template-columns: 950px 230px;
   column-gap: 20px;

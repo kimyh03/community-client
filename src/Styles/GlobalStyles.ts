@@ -14,10 +14,9 @@ export default createGlobalStyle`
         width:100%;
         margin: 0;
         margin: auto;
-        height:100%;
     }
     a {
-        color:${(props) => props.theme.blueColor};
+        color:inherit;
         text-decoration:none;
     }
     li{

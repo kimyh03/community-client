@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -9,6 +10,7 @@ const Container = styled.div`
   border-bottom: ${(props) => props.theme.boxBorder};
   :hover {
     background: #fafafa;
+    color: ${(props) => props.theme.carrotColor};
   }
 `;
 
@@ -54,7 +56,7 @@ const PostList: React.FunctionComponent<IProps> = (props) => (
   <Container>
     <CoulmnItemSmall>{props.id}</CoulmnItemSmall>
     <CoulmnItemLarge>
-      {props.title}
+      <Link to={`/post/${props.id}`}>{props.title}</Link>
       <Item>{`(${props.commentCount})`}</Item>
     </CoulmnItemLarge>
     {props.userName === "Hoony" ? (

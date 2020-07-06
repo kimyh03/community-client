@@ -69,6 +69,7 @@ const LikeCoulmn = styled.div`
 
 const Category = styled.div`
   margin-right: 10px;
+  color: ${(props) => props.theme.blueColor};
 `;
 
 const ProfileCard: React.FunctionComponent<IProps> = (props) => {

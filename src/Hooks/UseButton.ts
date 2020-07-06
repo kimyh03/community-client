@@ -1,16 +1,16 @@
 import { useState } from "react";
 
 const useButton = (defaultValue) => {
-  const [sortTerm, setSortTerm] = useState(defaultValue);
+  const [value, setValue] = useState(defaultValue);
 
   const onClick = (event) => {
     const {
-      target: { value }
+      target: { value: item }
     } = event;
-    setSortTerm(value);
+    setValue(item);
   };
 
-  return { sortTerm, onClick };
+  return { value, onClick };
 };
 
 export default useButton;

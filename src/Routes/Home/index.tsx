@@ -88,14 +88,12 @@ const sortItmes = [
 
 export default () => {
   const { loading, data } = useQuery<CategoryData>(GET_CATEGORIES);
-  const { sortTerm, onClick } = useButton("All");
+  const { value, onClick } = useButton("All");
   let cleanCategories;
-  if (sortTerm === "All") {
+  if (value === "All") {
     cleanCategories = data?.categories;
   } else {
-    cleanCategories = data?.categories.filter(
-      (item) => item.group === sortTerm
-    );
+    cleanCategories = data?.categories.filter((item) => item.group === value);
   }
   return (
     <>
@@ -105,7 +103,7 @@ export default () => {
       <ButtonContainer>
         {sortItmes.map((item) => (
           <Button
-            isClicked={item === sortTerm}
+            isClicked={item === value}
             key={item}
             value={item}
             onClick={onClick}

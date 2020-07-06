@@ -5,6 +5,7 @@ import Home from "src/Routes/Home";
 import Post from "src/Routes/Post";
 import Profile from "src/Routes/Profile";
 import Search from "src/Routes/Search";
+import SignUp from "src/Routes/SignUp";
 
 interface IProps {
   isLoggedIn: boolean;
@@ -13,6 +14,7 @@ interface IProps {
 const AppRouter: React.SFC<IProps> = (props) => (
   <Switch>
     <Route path={"/"} exact={true} component={Home} />
+    <Route path={"/signUp"} exact={true} component={SignUp} />
     <Route path="/search" component={Search} />
     <Route
       path={"/category/:category/:page"}
