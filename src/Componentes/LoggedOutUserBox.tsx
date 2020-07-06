@@ -1,16 +1,17 @@
-import { useLazyQuery, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import React, { useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
-import CarrotText from "./CarrotText";
 import Input from "./Input";
 
 const Container = styled.div`
   width: 100%;
-  height: 180px;
-  margin: 0;
-  margin: auto;
+  margin-bottom: 20px;
+  padding: 20px 10px 10px 10px;
+  background: white;
+  border: ${(props) => props.theme.boxBorder};
 `;
 
 const AuthForm = styled.form`
@@ -41,6 +42,22 @@ const Button = styled.button`
     opacity: 1;
   }
 `;
+
+const AuthMenu = styled.div`
+  color: ${(props) => props.theme.darkGreyColor};
+  font-size: 12px;
+  :hover {
+    color: ${(props) => props.theme.carrotColor};
+  }
+`;
+
+const SLink = styled(Link)`
+  margin-top: 10px;
+  align-self: flex-end;
+  justify-self: flex-end;
+  cursor: pointer;
+`;
+
 interface SignIn {
   token: string;
 }
@@ -59,7 +76,7 @@ interface LocalSignInInput {
 }
 
 const SIGN_IN = gql`
-  query signIn($accountId: String!, $password: String!) {
+  mutation signIn($accountId: String!, $password: String!) {
     signIn(accountId: $accountId, password: $password) {
       token
     }
@@ -75,32 +92,36 @@ const LOCAL_LOG_USER_IN = gql`
 const LoggedOutUserBox: React.FunctionComponent = () => {
   const accountID = useInput("");
   const password = useInput("");
-  const [logIn, { data }] = useLazyQuery<SignInResponse, SignInInput>(SIGN_IN, {
-    variables: { accountId: accountID.value, password: password.value }
-  });
+
+  const [logIn, { loading, data }] = useMutation<SignInResponse, SignInInput>(
+    SIGN_IN,
+    {
+      variables: { accountId: accountID.value, password: password.value }
+    }
+  );
   const [localLogIn] = useMutation<LocalSignInInput>(LOCAL_LOG_USER_IN, {
     variables: { token: data?.signIn.token }
   });
 
-  useEffect(() => {
-    logIn();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    logIn();
-    if (data?.signIn.token !== undefined && data?.signIn.token !== null) {
-      localLogIn();
-    } else {
-      console.log("아이디 혹은 비밀번호가 일치하지 않습니다.");
+    if (!loading) {
+      await logIn();
+      try {
+        if (data?.signIn.token === undefined || data?.signIn.token === null) {
+          console.log("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        } else {
+          await localLogIn();
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
   return (
     <Container>
       <AuthForm onSubmit={onSubmit}>
-        <CarrotText text="로그인" />
         <Input
           placeholder="아이디"
           required={true}
@@ -114,6 +135,9 @@ const LoggedOutUserBox: React.FunctionComponent = () => {
           {...password}
         ></Input>
         <Button>로그인</Button>
+        <SLink to={"/signUp"}>
+          <AuthMenu>회원가입</AuthMenu>
+        </SLink>
       </AuthForm>
     </Container>
   );
