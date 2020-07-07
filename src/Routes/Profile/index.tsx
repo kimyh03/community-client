@@ -24,7 +24,7 @@ const ButtonContainer = styled.div`
   display: flex;
 `;
 const Button = styled.button<{ isClicked: boolean }>`
-  width: 50%;
+  width: 100%;
   height: 40px;
   border: ${(props) => props.theme.boxBorder};
   opacity: ${(props) => (props.isClicked ? 0.6 : 0.9)};
@@ -73,6 +73,7 @@ interface Response {
   ok: boolean;
   error: string | null;
   user: User;
+  reqUser: string;
 }
 
 interface GetUserProfile {
@@ -114,6 +115,7 @@ const GET_USER_PROFILE = gql`
       }
       ok
       error
+      reqUser
     }
   }
 `;
@@ -128,6 +130,8 @@ export default withRouter(
       variables: { nickname }
     });
     const { value, onClick } = useButton("myPosts");
+    const isSelf = nickname === data?.getUserProfile.reqUser;
+    console.log(isSelf);
     let postList;
     if (value === "myPosts") {
       postList = data?.getUserProfile.user.posts;
@@ -152,22 +156,34 @@ export default withRouter(
               />
             )}
             <PostContainer>
-              <ButtonContainer>
-                <Button
-                  value={"myPosts"}
-                  onClick={onClick}
-                  isClicked={value === "myPosts"}
-                >
-                  내가 쓴 글
-                </Button>
-                <Button
-                  value={"bookmarkedPosts"}
-                  onClick={onClick}
-                  isClicked={value === "bookmarkedPosts"}
-                >
-                  북마크
-                </Button>
-              </ButtonContainer>
+              {isSelf ? (
+                <ButtonContainer>
+                  <Button
+                    value={"myPosts"}
+                    onClick={onClick}
+                    isClicked={value === "myPosts"}
+                  >
+                    내가 쓴 글
+                  </Button>
+                  <Button
+                    value={"bookmarkedPosts"}
+                    onClick={onClick}
+                    isClicked={value === "bookmarkedPosts"}
+                  >
+                    북마크
+                  </Button>
+                </ButtonContainer>
+              ) : (
+                <ButtonContainer>
+                  <Button
+                    value={"myPosts"}
+                    onClick={onClick}
+                    isClicked={value === "myPosts"}
+                  >
+                    게시글
+                  </Button>
+                </ButtonContainer>
+              )}
               <PostCoulmn />
               {postList?.map((post) => (
                 <PostList
