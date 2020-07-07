@@ -61,13 +61,19 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 30px;
   font-weight: 700;
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
   color: ${(props) => props.theme.carrotColor};
 `;
 
 const PostContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const NoPost = styled.div`
+  margin: 0;
+  margin: auto;
+  padding-top: 100px;
 `;
 
 export default withRouter(
@@ -83,32 +89,51 @@ export default withRouter(
         variables: { categoryTitle: category, page: PAGE }
       }
     );
-
-    return (
-      <>
-        <Title>{category}</Title>
-        <Container>
-          <PostCoulmn />
-          <PostContainer>
-            {loading ? (
-              <Loader />
-            ) : (
-              data?.seePostList.posts.map((post) => (
-                <PostList
-                  key={post.id}
-                  id={post.id}
-                  userName={post.userName}
-                  title={post.title}
-                  viewCount={post.viewCount}
-                  likeCount={post.likeCount}
-                  commentCount={post.commentCount}
-                  createdAt={post.createdAt}
-                />
-              ))
-            )}
-          </PostContainer>
-        </Container>
-      </>
-    );
+    if (loading) {
+      return <Loader />;
+    } else if (
+      data?.seePostList &&
+      data?.seePostList.posts &&
+      data?.seePostList.posts.length > 0
+    ) {
+      return (
+        <>
+          <Title>{category}</Title>
+          <Container>
+            <PostCoulmn />
+            <PostContainer>
+              {loading ? (
+                <Loader />
+              ) : (
+                data?.seePostList.posts.map((post) => (
+                  <PostList
+                    key={post.id}
+                    id={post.id}
+                    userName={post.userName}
+                    title={post.title}
+                    viewCount={post.viewCount}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount}
+                    createdAt={post.createdAt}
+                  />
+                ))
+              )}
+            </PostContainer>
+          </Container>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Title>{category}</Title>
+          <Container>
+            <PostCoulmn />
+            <PostContainer>
+              <NoPost>아직 게시물이 없습니다.</NoPost>
+            </PostContainer>
+          </Container>
+        </>
+      );
+    }
   }
 );
