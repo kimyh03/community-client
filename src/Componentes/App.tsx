@@ -26,7 +26,7 @@ const Grid = styled.div`
 const ColumnWrapper = styled.div`
   margin: 10px 0;
   width: 100%;
-  height: 1000px;
+  height: 100%;
 `;
 
 const GET_ISLOGGEDIN = gql`

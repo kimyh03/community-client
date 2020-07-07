@@ -59,11 +59,9 @@ const PostList: React.FunctionComponent<IProps> = (props) => (
       <Link to={`/post/${props.id}`}>{props.title}</Link>
       <Item>{`(${props.commentCount})`}</Item>
     </CoulmnItemLarge>
-    {props.userName === "Hoony" ? (
-      <CoulmnItemMiddle>{props.userName}</CoulmnItemMiddle>
-    ) : (
-      <CoulmnItemMiddle>{props.userName}</CoulmnItemMiddle>
-    )}
+    <CoulmnItemMiddle>
+      <Link to={`/user/${props.userName}`}>{props.userName}</Link>
+    </CoulmnItemMiddle>
     <CoulmnItemMiddle>{props.createdAt.substring(0, 10)}</CoulmnItemMiddle>
     <CoulmnItemSmall>{props.viewCount}</CoulmnItemSmall>
     <CoulmnItemSmall>{props.likeCount}</CoulmnItemSmall>
