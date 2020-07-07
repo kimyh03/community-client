@@ -1,10 +1,9 @@
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Loader from "src/Componentes/Loader";
 import PostCard from "src/Componentes/PostCard";
-import styled from "styled-components";
 
 const GET_POST_DETAIL = gql`
   query seePostDetail($id: String!) {
@@ -24,17 +23,14 @@ const GET_POST_DETAIL = gql`
         }
         comments {
           id
+          userName
+          text
+          createdAt
         }
       }
+      reqUser
     }
   }
-`;
-
-const CategoryTitle = styled.div`
-  display: inline;
-  font-size: 30px;
-  font-weight: 700;
-  color: ${(props) => props.theme.carrotColor};
 `;
 
 export default withRouter(
@@ -46,6 +42,7 @@ export default withRouter(
     const { loading, data } = useQuery(GET_POST_DETAIL, {
       variables: { id: post }
     });
+
     if (loading === true) {
       return <Loader />;
     } else if (!loading && data?.seePostDetail && data.seePostDetail.post) {
@@ -55,29 +52,31 @@ export default withRouter(
             categoryTitle,
             id,
             title,
-            username,
+            userName,
             text,
-            viewcount,
+            viewCount,
+            likeCount,
             commentCount,
-            createdAt
+            createdAt,
+            comments
           }
         }
       } = data;
       return (
         <>
-          <Link to={`/category/${categoryTitle}/1`}>
-            <CategoryTitle>{categoryTitle}</CategoryTitle>
-          </Link>
           <PostCard
             id={id}
+            categoryTitle={categoryTitle}
             title={title}
-            username={username}
+            userName={userName}
             text={text}
-            viewcount={viewcount}
+            viewCount={viewCount}
+            likeCount={likeCount}
             commentCount={commentCount}
             createdAt={createdAt}
+            comments={comments}
+            reqUser={data?.seePostDetail.reqUser}
           />
-          ;
         </>
       );
     }
