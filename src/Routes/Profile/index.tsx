@@ -131,7 +131,6 @@ export default withRouter(
     });
     const { value, onClick } = useButton("myPosts");
     const isSelf = nickname === data?.getUserProfile.reqUser;
-    console.log(isSelf);
     let postList;
     if (value === "myPosts") {
       postList = data?.getUserProfile.user.posts;

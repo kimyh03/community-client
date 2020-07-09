@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import CarrotText from "./CarrotText";
 import Loader from "./Loader";
@@ -78,7 +77,7 @@ const Wrapper = styled.div`
   height: 40%;
 `;
 
-const SLink = styled(Link)`
+const SLink = styled.a`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -119,7 +118,7 @@ const LoggedInUserBox: React.FunctionComponent = () => {
               <Nickname>{`${data?.getMe.nickname}`}</Nickname>
               <Greeting> 님 안녕하세요!</Greeting>
             </Wrapper>
-            <SLink to={`/user/${data?.getMe.nickname}`}>
+            <SLink href={`/user/${data?.getMe.nickname}`}>
               <Button>내피드</Button>
             </SLink>
             <AuthMenu onClick={onClick}>로그아웃</AuthMenu>
