@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import Input from "src/Componentes/Input";
+import PasswordValidator from "src/Componentes/PasswordValidator";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 
@@ -51,7 +52,7 @@ const Spacer = styled.div`
   height: 30px;
 `;
 
-const Button = styled.button`
+const SubmitButton = styled.button`
   width: 80%;
   height: 35px;
   margin: 30px 0 15px 0;
@@ -68,6 +69,7 @@ const Button = styled.button`
     opacity: 0.7;
   }
 `;
+
 interface SignUpInput {
   nickname: string;
   accountId: string;
@@ -135,6 +137,11 @@ export default () => {
             onChange={confirmPassword.onChange}
             type={"password"}
           ></Input>
+          {password.value !== "" && confirmPassword.value !== "" && (
+            <PasswordValidator
+              isCorrect={password.value === confirmPassword.value}
+            />
+          )}
           <Spacer />
           <Input
             placeholder={"이메일"}
@@ -143,7 +150,7 @@ export default () => {
             onChange={email.onChange}
             type={"email"}
           ></Input>
-          <Button>회원가입</Button>
+          <SubmitButton>회원가입</SubmitButton>
         </AuthForm>
       </Container>
     </>
