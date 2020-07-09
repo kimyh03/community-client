@@ -28,6 +28,14 @@ const CREATE_COMMENT = gql`
   }
 `;
 
+const DELETE_COMMENT = gql`
+  mutation deleteComment($id: String!) {
+    deleteComment(id: $id) {
+      ok
+    }
+  }
+`;
+
 const CommentContainer = styled.div`
   margin-top: 20px;
 `;
@@ -119,7 +127,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const CommentDelete = styled.button`
+const DeleteButton = styled.button`
   color: ${(props) => props.theme.carrotColor};
   border: none;
   background: white;
@@ -135,6 +143,9 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
   const [createComment] = useMutation(CREATE_COMMENT, {
     variables: { postId: props.postId, text: newComment.value }
   });
+
+  const [deleteComment] = useMutation(DELETE_COMMENT);
+
   const onKeyPress = async (event) => {
     if (event.which === 13) {
       try {
@@ -153,6 +164,11 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
     }
     return null;
   };
+
+  const onClick = async (event) => {
+    await deleteComment({ variables: { id: event.target.id } });
+    window.location.reload();
+  };
   return (
     <>
       <CommentContainer>
@@ -169,7 +185,9 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
                       <Link to={`/user/${comment.userName}`}>
                         <UserName>{comment.userName}</UserName>
                       </Link>
-                      <CommentDelete>X</CommentDelete>
+                      <DeleteButton id={comment.id} onClick={onClick}>
+                        X
+                      </DeleteButton>
                     </Wrapper>
                   ) : (
                     <Link to={`/user/${comment.userName}`}>

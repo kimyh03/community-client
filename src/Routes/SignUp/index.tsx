@@ -99,7 +99,6 @@ export default () => {
       console.log(error.message);
     }
   };
-  console.log(nickname.value, accountId.value, password.value, email.value);
   return (
     <>
       <Container>
