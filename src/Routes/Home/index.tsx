@@ -33,6 +33,7 @@ const Title = styled.div`
 
 const CategoiesBox = styled.div`
   width: 100%;
+  padding: 10px 20px;
   height: 200px;
   display: flex;
   border-left: ${(props) => props.theme.boxBorder};
