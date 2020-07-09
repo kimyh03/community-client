@@ -1,7 +1,17 @@
+import { useMutation } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import PostComment from "./PostComment";
+
+const DELETE_POST = gql`
+  mutation deletePost($id: String!) {
+    deletePost(id: $id) {
+      ok
+    }
+  }
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -109,6 +119,13 @@ interface IProps {
 }
 
 const PostCard: React.FunctionComponent<IProps> = (props) => {
+  const [deletePost] = useMutation(DELETE_POST, {
+    variables: { id: props.id }
+  });
+  const onClick = async () => {
+    await deletePost();
+    window.location.href = `http://localhost:3000/category/${props.categoryTitle}/1`;
+  };
   const isSelf = props.userName === props.reqUser;
   return (
     <>
@@ -120,7 +137,7 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
             </Link>
             <SubCoulmn>
               <Button>수정</Button>
-              <Button>삭제</Button>
+              <Button onClick={onClick}>삭제</Button>
             </SubCoulmn>
           </Wrapper>
         ) : (
