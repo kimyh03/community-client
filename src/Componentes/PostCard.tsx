@@ -97,6 +97,30 @@ const Button = styled.button`
   }
 `;
 
+const CreatePostBtnContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+`;
+
+const CreatePostBtn = styled.button`
+  width: 70px;
+  height: 30px;
+  background: ${(props) => props.theme.carrotColor};
+  color: white;
+  border-radius: 7px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  opacity: 1;
+  transition: ease-in 0.1s;
+  :hover {
+    opacity: 0.8;
+  }
+`;
+
 interface Comment {
   id: string;
   userName: string;
@@ -129,6 +153,11 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
   const isSelf = props.userName === props.reqUser;
   return (
     <>
+      <CreatePostBtnContainer>
+        <Link to={`/${props.categoryTitle}/create`}>
+          <CreatePostBtn>글쓰기</CreatePostBtn>
+        </Link>
+      </CreatePostBtnContainer>
       <Container>
         {isSelf ? (
           <Wrapper>
@@ -136,7 +165,9 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
               <CategoryTitle>{props.categoryTitle}</CategoryTitle>
             </Link>
             <SubCoulmn>
-              <Button>수정</Button>
+              <Link to={`/${props.categoryTitle}/${props.id}/edit`}>
+                <Button>수정</Button>
+              </Link>
               <Button onClick={onClick}>삭제</Button>
             </SubCoulmn>
           </Wrapper>

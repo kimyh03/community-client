@@ -1,10 +1,11 @@
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Loader from "src/Componentes/Loader";
 import PostCoulmn from "src/Componentes/PostCoulmn";
 import PostList from "src/Componentes/PostList";
+import ToggleFavCategory from "src/Componentes/ToggleFavCategory";
 import styled from "styled-components";
 
 interface Post {
@@ -21,6 +22,7 @@ interface Response {
   ok: boolean;
   error: string | null;
   posts: Post[];
+  isFav: boolean;
 }
 
 interface PostListData {
@@ -44,6 +46,7 @@ const GET_POSTLIST = gql`
         commentCount
         createdAt
       }
+      isFav
       ok
       error
     }
@@ -76,6 +79,34 @@ const NoPost = styled.div`
   padding-top: 100px;
 `;
 
+const Button = styled.button`
+  width: 70px;
+  height: 30px;
+  margin-left: 5px;
+  background: ${(props) => props.theme.carrotColor};
+  color: white;
+  border-radius: 7px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  opacity: 1;
+  transition: ease-in 0.1s;
+  :hover {
+    opacity: 0.8;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export default withRouter(
   ({
     match: {
@@ -89,6 +120,7 @@ export default withRouter(
         variables: { categoryTitle: category, page: PAGE }
       }
     );
+
     if (loading) {
       return <Loader />;
     } else if (
@@ -98,7 +130,18 @@ export default withRouter(
     ) {
       return (
         <>
-          <Title>{category}</Title>
+          <Wrapper>
+            <TitleWrapper>
+              <Title>{category}</Title>
+              <ToggleFavCategory
+                isFav={data?.seePostList.isFav}
+                category={category}
+              />
+            </TitleWrapper>
+            <Link to={`/${category}/create`}>
+              <Button>글쓰기</Button>
+            </Link>
+          </Wrapper>
           <Container>
             <PostCoulmn />
             <PostContainer>
@@ -122,10 +165,21 @@ export default withRouter(
           </Container>
         </>
       );
-    } else {
+    } else if (data?.seePostList && data?.seePostList.isFav !== undefined) {
       return (
         <>
-          <Title>{category}</Title>
+          <Wrapper>
+            <TitleWrapper>
+              <Title>{category}</Title>
+              <ToggleFavCategory
+                isFav={data?.seePostList.isFav}
+                category={category}
+              />
+            </TitleWrapper>
+            <Link to={`/${category}/create`}>
+              <Button>글쓰기</Button>
+            </Link>
+          </Wrapper>
           <Container>
             <PostCoulmn />
             <PostContainer>
@@ -134,6 +188,6 @@ export default withRouter(
           </Container>
         </>
       );
-    }
+    } else return null;
   }
 );
