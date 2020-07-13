@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Bio from "./Bio";
 
 interface Category {
   title: string;
@@ -15,6 +16,7 @@ interface IProps {
   email: string;
   likeCount: number;
   favCategories: Category[];
+  isSelf: boolean;
 }
 
 const Container = styled.div`
@@ -32,11 +34,6 @@ const Nickname = styled.div`
   color: ${(props) => props.theme.carrotColor};
 `;
 
-const Bio = styled.div`
-  margin-bottom: 15px;
-  font-size: 14px;
-  opacity: 0.8;
-`;
 const LikeCount = styled.div`
   opacity: 0.7;
   font-size: 150px;
@@ -77,7 +74,7 @@ const ProfileCard: React.FunctionComponent<IProps> = (props) => {
     <Container>
       <MainCoulmn>
         <Nickname>{props.nickname}</Nickname>
-        <Bio>안녕하세요! 잘 부탁드립니다.</Bio>
+        <Bio isSelf={props.isSelf} bio={props.bio} />
         <Categories>
           {props.favCategories &&
             props.favCategories.map((item) => (
@@ -88,6 +85,7 @@ const ProfileCard: React.FunctionComponent<IProps> = (props) => {
         </Categories>
       </MainCoulmn>
       <LikeCoulmn>
+        <LikeText>추천</LikeText>
         <LikeCount>{`${props.likeCount}`}</LikeCount>
         <LikeText>개</LikeText>
       </LikeCoulmn>

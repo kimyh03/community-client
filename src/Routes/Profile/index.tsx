@@ -152,6 +152,7 @@ export default withRouter(
                 email={data.getUserProfile.user.email}
                 likeCount={data.getUserProfile.user.likesReceivedCount}
                 favCategories={data.getUserProfile.user.favCategories}
+                isSelf={isSelf}
               />
             )}
             <PostContainer>
