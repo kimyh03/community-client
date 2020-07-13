@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 import React from "react";
 import TextareaAutosize from "react-autosize-textarea";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 
@@ -150,24 +151,31 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
     if (event.which === 13) {
       try {
         await createComment();
+        toast.success("댓글이 등록되었습니다!");
         window.location.reload();
       } catch (error) {
-        console.log(error.message);
+        toast.error("잘못된 접근입니다.");
       }
     }
   };
   const onSubmit: React.FormEventHandler = async (event) => {
     try {
       await createComment();
+      toast.success("댓글이 등록되었습니다!");
     } catch (error) {
-      console.log(error.message);
+      toast.error("잘못된 접근입니다.");
     }
     return null;
   };
 
   const onClick = async (event) => {
-    await deleteComment({ variables: { id: event.target.id } });
-    window.location.reload();
+    try {
+      await deleteComment({ variables: { id: event.target.id } });
+      window.location.reload();
+      toast.warning("댓글이 삭제되었습니다!");
+    } catch (error) {
+      toast.error("잘못된 접근입니다.");
+    }
   };
   return (
     <>
