@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 
@@ -116,12 +117,15 @@ const CreatePost = (props) => {
   const [createPost] = useMutation(CREATE_POST, {
     variables: { categoryTitle: category, title: title.value, text: text.value }
   });
-  const onSubmit = async () => {
+  const onSubmit = async (event) => {
+    event.preventDefault();
     try {
       await createPost();
       window.location.href = `http://localhost:3000/category/${category}/1`;
+      toast.success("글이 등록 되었습니다.");
     } catch (error) {
-      console.log(error.message);
+      window.location.href = `http://localhost:3000`;
+      toast.error("잘못된 접근입니다.");
     }
   };
   return (
@@ -136,12 +140,14 @@ const CreatePost = (props) => {
             placeholder={"제목을 입력해 주세요"}
             value={title.value}
             onChange={title.onChange}
+            required={true}
           ></TilteInput>
           <Text>내용</Text>
           <TextInput
             placeholder={"내용을 입력해 주세요"}
             value={text.value}
             onChange={text.onChange}
+            required={true}
           ></TextInput>
           <Button>등록</Button>
         </CreatePostForm>
