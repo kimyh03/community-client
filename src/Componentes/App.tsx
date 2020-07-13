@@ -2,6 +2,8 @@ import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styled, { ThemeProvider } from "styled-components";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
@@ -26,7 +28,7 @@ const Grid = styled.div`
 const ColumnWrapper = styled.div`
   margin: 10px 0;
   width: 100%;
-  height: 100%;
+  height: 90%;
 `;
 
 const GET_ISLOGGEDIN = gql`
@@ -46,6 +48,7 @@ export default () => {
           <Grid>
             <ColumnWrapper>
               <Routes isLoggedIn={data?.isLoggedIn} />
+              <ToastContainer position={"bottom-left"} />
             </ColumnWrapper>
             <ColumnWrapper>
               {data?.isLoggedIn ? <LoggedInUserBox /> : <LoggedOutUserBox />}
