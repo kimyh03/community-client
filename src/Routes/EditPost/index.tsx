@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 import Loader from "src/Componentes/Loader";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
@@ -120,8 +121,8 @@ const EditPost = (props) => {
     }
   } = props;
   const { loading, data } = useQuery(GET_POST, { variables: { id: post } });
-  const title = useInput(data?.getPostForEdit.post.title);
-  const text = useInput(data?.getPostForEdit.post.text);
+  const title = useInput("");
+  const text = useInput("");
   const [editPost] = useMutation(EDIT_POST, {
     variables: { id: post, title: title.value, text: text.value }
   });
@@ -129,9 +130,11 @@ const EditPost = (props) => {
     event.preventDefault();
     try {
       await editPost();
+      toast.success("글이 수정되었습니다.");
       window.location.href = `http://localhost:3000/post/${post}`;
     } catch (error) {
-      console.log(error.message);
+      toast.error("잘못된 접근입니다.");
+      window.location.href = `http://localhost:3000`;
     }
   };
   if (loading) return <Loader />;
@@ -145,13 +148,13 @@ const EditPost = (props) => {
           <EditPostForm onSubmit={onSubmit}>
             <Text>제목</Text>
             <TilteInput
-              placeholder={"제목을 입력해 주세요"}
+              placeholder={data?.getPostForEdit.post.title}
               value={title.value}
               onChange={title.onChange}
             ></TilteInput>
             <Text>내용</Text>
             <TextInput
-              placeholder={"내용을 입력해 주세요"}
+              placeholder={data?.getPostForEdit.post.text}
               value={text.value}
               onChange={text.onChange}
             ></TextInput>
