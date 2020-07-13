@@ -28,6 +28,8 @@ const GET_POST_DETAIL = gql`
           createdAt
         }
       }
+      isBookmarked
+      isLiked
       reqUser
     }
   }
@@ -59,7 +61,10 @@ export default withRouter(
             commentCount,
             createdAt,
             comments
-          }
+          },
+          isBookmarked,
+          isLiked,
+          reqUser
         }
       } = data;
       return (
@@ -75,7 +80,9 @@ export default withRouter(
             commentCount={commentCount}
             createdAt={createdAt}
             comments={comments}
-            reqUser={data?.seePostDetail.reqUser}
+            isBookmarked={isBookmarked}
+            isLiked={isLiked}
+            reqUser={reqUser}
           />
         </>
       );

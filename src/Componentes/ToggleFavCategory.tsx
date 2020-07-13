@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
-import { HeartEmpty, HeartFull } from "./Icons";
+import { StarEmpty, StarFull } from "./Icons";
 
 interface IProps {
   isFav: boolean;
@@ -18,6 +19,9 @@ const TOGGLE_FAVCATEGORY = gql`
 `;
 
 const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   height: 20px;
@@ -28,15 +32,21 @@ const ToggleFavCategory: React.FunctionComponent<IProps> = (props) => {
     variables: { title: props.category }
   });
   const onClick = async () => {
-    await toggleFavCategory();
-    if (isFavS === true) {
-      setIsFav(false);
-    } else {
-      setIsFav(true);
+    try {
+      if (isFavS === true) {
+        setIsFav(false);
+        toast.warning("즐겨찾기가 해제 되었습니다.");
+      } else {
+        setIsFav(true);
+        toast.success("즐겨찾기가 추가 되었습니다, 피드에서 확인하세요!");
+      }
+      await toggleFavCategory();
+    } catch (error) {
+      toast.error("로그인 후 이용하실 수 있습니다.");
     }
   };
   return (
-    <Button onClick={onClick}>{isFavS ? <HeartFull /> : <HeartEmpty />}</Button>
+    <Button onClick={onClick}>{isFavS ? <StarFull /> : <StarEmpty />}</Button>
   );
 };
 export default ToggleFavCategory;

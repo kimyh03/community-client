@@ -2,8 +2,11 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import PostComment from "./PostComment";
+import TogglePostBookmark from "./TogglePostBookmark";
+import TogglePostLike from "./TogglePostLike";
 
 const DELETE_POST = gql`
   mutation deletePost($id: String!) {
@@ -139,6 +142,8 @@ interface IProps {
   commentCount: string;
   createdAt: string;
   reqUser: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
   comments: [Comment];
 }
 
@@ -147,8 +152,13 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
     variables: { id: props.id }
   });
   const onClick = async () => {
-    await deletePost();
-    window.location.href = `http://localhost:3000/category/${props.categoryTitle}/1`;
+    try {
+      await deletePost();
+      window.location.href = `http://localhost:3000/category/${props.categoryTitle}/1`;
+      toast.warning("글이 삭제되었습니다.");
+    } catch (error) {
+      toast.error("잘못된 접근 입니다.");
+    }
   };
   const isSelf = props.userName === props.reqUser;
   return (
@@ -172,9 +182,18 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
             </SubCoulmn>
           </Wrapper>
         ) : (
-          <Link to={`/category/${props.categoryTitle}/1`}>
-            <CategoryTitle>{props.categoryTitle}</CategoryTitle>
-          </Link>
+          <Wrapper>
+            <Link to={`/category/${props.categoryTitle}/1`}>
+              <CategoryTitle>{props.categoryTitle}</CategoryTitle>
+            </Link>
+            <SubCoulmn>
+              <TogglePostBookmark
+                postId={props.id}
+                isBookmarked={props.isBookmarked}
+              />
+              <TogglePostLike postId={props.id} isLiked={props.isLiked} />
+            </SubCoulmn>
+          </Wrapper>
         )}
         <Title>{props.title}</Title>
         <Wrapper>
