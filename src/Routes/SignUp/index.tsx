@@ -1,25 +1,18 @@
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
+import { toast } from "react-toastify";
 import Input from "src/Componentes/Input";
 import PasswordValidator from "src/Componentes/PasswordValidator";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 
 const SIGN_UP = gql`
-  mutation signUp(
-    $nickname: String!
-    $accountId: String!
-    $password: String!
-    $email: String!
-  ) {
-    signUp(
-      nickname: $nickname
-      accountId: $accountId
-      password: $password
-      email: $email
-    ) {
+  mutation signUp($nickname: String!, $password: String!, $email: String!) {
+    signUp(nickname: $nickname, password: $password, email: $email) {
       ok
+      existEmail
+      existNickname
     }
   }
 `;
@@ -70,35 +63,34 @@ const SubmitButton = styled.button`
   }
 `;
 
-interface SignUpInput {
-  nickname: string;
-  accountId: string;
-  password: string;
-  email: string;
-}
 export default () => {
   const nickname = useInput("");
-  const accountId = useInput("");
   const password = useInput("");
   const confirmPassword = useInput("");
   const email = useInput("");
 
-  const [signUp] = useMutation<SignUpInput>(SIGN_UP, {
+  const [signUp] = useMutation(SIGN_UP, {
     variables: {
       nickname: nickname.value,
-      accountId: accountId.value,
       password: password.value,
       email: email.value
+    },
+    onError(error) {
+      throw new Error(error.message.substring(15));
     }
   });
 
   const onSubmit = async (event) => {
+    event.preventDefault();
+    if (password.value !== confirmPassword.value) {
+      toast.error("비밀번호가 일치하지 않습니다.");
+    }
     try {
-      event.preventDefault();
       await signUp();
       window.location.href = "http://localhost:3000/";
+      toast.success("회원가입이 완료 되었습니다!");
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
   return (
@@ -107,18 +99,10 @@ export default () => {
         <Title>안녕하세요. 반갑습니다!</Title>
         <AuthForm onSubmit={onSubmit}>
           <Input
-            placeholder={"활동명"}
+            placeholder={"아이디(활동명)"}
             required={true}
             value={nickname.value}
             onChange={nickname.onChange}
-            type={"text"}
-          ></Input>
-          <Spacer />
-          <Input
-            placeholder={"아이디"}
-            required={true}
-            value={accountId.value}
-            onChange={accountId.onChange}
             type={"text"}
           ></Input>
           <Spacer />

@@ -67,7 +67,7 @@ interface SignInResponse {
 }
 
 interface SignInInput {
-  accountId: string;
+  nickname: string;
   password: string;
 }
 
@@ -76,8 +76,8 @@ interface LocalSignInInput {
 }
 
 const SIGN_IN = gql`
-  mutation signIn($accountId: String!, $password: String!) {
-    signIn(accountId: $accountId, password: $password) {
+  mutation signIn($nickname: String!, $password: String!) {
+    signIn(nickname: $nickname, password: $password) {
       token
     }
   }
@@ -90,13 +90,13 @@ const LOCAL_LOG_USER_IN = gql`
 `;
 
 const LoggedOutUserBox: React.FunctionComponent = () => {
-  const accountID = useInput("");
+  const nickname = useInput("");
   const password = useInput("");
 
   const [logIn, { loading, data }] = useMutation<SignInResponse, SignInInput>(
     SIGN_IN,
     {
-      variables: { accountId: accountID.value, password: password.value }
+      variables: { nickname: nickname.value, password: password.value }
     }
   );
   const [localLogIn] = useMutation<LocalSignInInput>(LOCAL_LOG_USER_IN, {
@@ -123,15 +123,15 @@ const LoggedOutUserBox: React.FunctionComponent = () => {
     <Container>
       <AuthForm onSubmit={onSubmit}>
         <Input
-          placeholder="아이디"
+          placeholder="아이디(활동명)"
           required={true}
           type={"text"}
-          {...accountID}
+          {...nickname}
         ></Input>
         <Input
           placeholder="비밀번호"
           required={true}
-          type={"text"}
+          type={"password"}
           {...password}
         ></Input>
         <Button>로그인</Button>
