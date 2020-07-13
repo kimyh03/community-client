@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import Loader from "src/Componentes/Loader";
+import Pages from "src/Componentes/Pages";
 import PostCoulmn from "src/Componentes/PostCoulmn";
 import PostList from "src/Componentes/PostList";
 import ToggleFavCategory from "src/Componentes/ToggleFavCategory";
@@ -23,6 +24,7 @@ interface Response {
   error: string | null;
   posts: Post[];
   isFav: boolean;
+  postCount: number;
 }
 
 interface PostListData {
@@ -49,6 +51,7 @@ const GET_POSTLIST = gql`
       isFav
       ok
       error
+      postCount
     }
   }
 `;
@@ -69,9 +72,13 @@ const Title = styled.div`
 `;
 
 const PostContainer = styled.div`
+  height: 93%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
+
+const PostListWrapper = styled.div``;
 
 const NoPost = styled.div`
   margin: 0;
@@ -105,6 +112,7 @@ const Wrapper = styled.div`
 const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
 `;
 
 export default withRouter(
@@ -120,7 +128,6 @@ export default withRouter(
         variables: { categoryTitle: category, page: PAGE }
       }
     );
-
     if (loading) {
       return <Loader />;
     } else if (
@@ -148,33 +155,35 @@ export default withRouter(
               {loading ? (
                 <Loader />
               ) : (
-                data?.seePostList.posts.map((post) => (
-                  <PostList
-                    key={post.id}
-                    id={post.id}
-                    userName={post.userName}
-                    title={post.title}
-                    viewCount={post.viewCount}
-                    likeCount={post.likeCount}
-                    commentCount={post.commentCount}
-                    createdAt={post.createdAt}
-                  />
-                ))
+                <PostListWrapper>
+                  {data?.seePostList.posts.map((post) => (
+                    <PostList
+                      key={post.id}
+                      id={post.id}
+                      userName={post.userName}
+                      title={post.title}
+                      viewCount={post.viewCount}
+                      likeCount={post.likeCount}
+                      commentCount={post.commentCount}
+                      createdAt={post.createdAt}
+                    />
+                  ))}
+                </PostListWrapper>
               )}
+              <Pages
+                category={category}
+                postCount={data?.seePostList.postCount}
+              />
             </PostContainer>
           </Container>
         </>
       );
-    } else if (data?.seePostList && data?.seePostList.isFav !== undefined) {
+    } else {
       return (
         <>
           <Wrapper>
             <TitleWrapper>
               <Title>{category}</Title>
-              <ToggleFavCategory
-                isFav={data?.seePostList.isFav}
-                category={category}
-              />
             </TitleWrapper>
             <Link to={`/${category}/create`}>
               <Button>글쓰기</Button>
@@ -188,6 +197,6 @@ export default withRouter(
           </Container>
         </>
       );
-    } else return null;
+    }
   }
 );
