@@ -17,7 +17,6 @@ const AppRouter: React.SFC<IProps> = (props) => (
   <Switch>
     <Route path={"/"} exact={true} component={Home} />
     <Route path={"/signUp"} exact={true} component={SignUp} />
-    <Route path="/search" component={Search} />
     <Route
       path={"/category/:category/:page"}
       exact={true}
@@ -26,6 +25,7 @@ const AppRouter: React.SFC<IProps> = (props) => (
     <Route path={"/:category/create"} exact={true} component={CreatePost} />
     <Route path={"/post/:post"} exact={true} component={Post} />
     <Route path={"/user/:nickname"} exact={true} component={Profile} />
+    <Route path={"/search/:term"} exact={true} component={Search} />
     <Route path={"/:category/:post/edit"} exact={true} component={EditPost} />
   </Switch>
 );

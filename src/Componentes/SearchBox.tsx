@@ -1,7 +1,8 @@
 import React from "react";
+import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 
-const Container = styled.div`
+const Container = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,9 +34,22 @@ const Button = styled.button`
   }
 `;
 
-export default () => (
-  <Container>
-    <Input placeholder="검색어를 입력하세요" />
-    <Button>검색</Button>
-  </Container>
-);
+export default () => {
+  const { value, onChange, setValue } = useInput("");
+  const onSubmit = (event) => {
+    event.preventDefault();
+    window.location.href = `http://localhost:3000/search/${value}`;
+    setValue("");
+    return null;
+  };
+  return (
+    <Container onSubmit={onSubmit}>
+      <Input
+        value={value}
+        onChange={onChange}
+        placeholder="검색어를 입력하세요"
+      />
+      <Button>검색</Button>
+    </Container>
+  );
+};
