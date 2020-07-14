@@ -97,11 +97,11 @@ export default withRouter(
 
     const handleScroll = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop !==
+        window.innerHeight + document.documentElement.scrollTop ===
         document.documentElement.offsetHeight
-      )
-        return;
-      setLoadMore(true);
+      ) {
+        setLoadMore(true);
+      } else return;
     };
 
     const firstFetch = async () => {
