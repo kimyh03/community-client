@@ -45,6 +45,7 @@ const LikeText = styled.div`
   padding-bottom: 20px;
 `;
 const Categories = styled.div`
+  margin-top: 10px;
   display: flex;
   color: ${(props) => props.theme.blueColor};
 `;

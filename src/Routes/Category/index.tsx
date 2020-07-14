@@ -60,8 +60,8 @@ const Container = styled.div`
   background: white;
   border: ${(props) => props.theme.boxBorder};
   border-radius: 7px;
-  height: 100%;
-  max-height: 650px;
+  min-height: 700px;
+  height: 88%;
 `;
 
 const Title = styled.div`
@@ -72,18 +72,19 @@ const Title = styled.div`
 `;
 
 const PostContainer = styled.div`
-  height: 93%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 
-const PostListWrapper = styled.div``;
+const PostListWrapper = styled.div`
+  height: 90%;
+`;
 
 const NoPost = styled.div`
   margin: 0;
   margin: auto;
-  padding-top: 100px;
 `;
 
 const Button = styled.button`

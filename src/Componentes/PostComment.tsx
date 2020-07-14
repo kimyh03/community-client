@@ -158,7 +158,7 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
       }
     }
   };
-  const onSubmit: React.FormEventHandler = async (event) => {
+  const onSubmitToCreateComment: React.FormEventHandler = async (event) => {
     try {
       await createComment();
       toast.success("댓글이 등록되었습니다!");
@@ -168,7 +168,7 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
     return null;
   };
 
-  const onClick = async (event) => {
+  const onClickToDeleteComment = async (event) => {
     try {
       await deleteComment({ variables: { id: event.target.id } });
       window.location.reload();
@@ -193,7 +193,10 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
                       <Link to={`/user/${comment.userName}`}>
                         <UserName>{comment.userName}</UserName>
                       </Link>
-                      <DeleteButton id={comment.id} onClick={onClick}>
+                      <DeleteButton
+                        id={comment.id}
+                        onClick={onClickToDeleteComment}
+                      >
                         X
                       </DeleteButton>
                     </Wrapper>
@@ -208,7 +211,7 @@ const PostComment: React.FunctionComponent<IProps> = (props) => {
               );
             })}
         </CommentList>
-        <CommentForm onSubmit={onSubmit}>
+        <CommentForm onSubmit={onSubmitToCreateComment}>
           <TextArea
             onKeyPress={onKeyPress}
             placeholder={"댓글을 남겨보세요"}

@@ -31,7 +31,7 @@ interface IProps {
 }
 
 const Pages: React.FunctionComponent<IProps> = (props) => {
-  const numberOfPages = Math.ceil(props.postCount / 3);
+  const numberOfPages = Math.ceil(props.postCount / 15);
   return (
     <Container>
       <LeftArrow>

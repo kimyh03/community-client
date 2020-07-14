@@ -9,7 +9,6 @@ import { Check, Edit } from "./Icons";
 const Text = styled.div``;
 
 const Container = styled.div`
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
   opacity: 0.8;

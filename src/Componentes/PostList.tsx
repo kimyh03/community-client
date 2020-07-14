@@ -6,7 +6,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 0;
+  padding: 20px 0;
   border-bottom: ${(props) => props.theme.boxBorder};
   :hover {
     background: #fafafa;
