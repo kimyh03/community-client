@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import useInput from "src/Hooks/UseInput";
 import styled from "styled-components";
 import Input from "./Input";
@@ -93,29 +94,27 @@ const LoggedOutUserBox: React.FunctionComponent = () => {
   const nickname = useInput("");
   const password = useInput("");
 
-  const [logIn, { loading, data }] = useMutation<SignInResponse, SignInInput>(
-    SIGN_IN,
-    {
-      variables: { nickname: nickname.value, password: password.value }
+  const [logIn, { data }] = useMutation<SignInResponse, SignInInput>(SIGN_IN, {
+    variables: { nickname: nickname.value, password: password.value },
+    onError(error) {
+      throw new Error(error.message.substring(15));
     }
-  );
+  });
   const [localLogIn] = useMutation<LocalSignInInput>(LOCAL_LOG_USER_IN, {
-    variables: { token: data?.signIn.token }
+    variables: { token: data?.signIn.token },
+    onError(error) {
+      throw new Error(error.message.substring(15));
+    }
   });
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (!loading) {
+    try {
       await logIn();
-      try {
-        if (data?.signIn.token === undefined || data?.signIn.token === null) {
-          console.log("아이디 혹은 비밀번호가 일치하지 않습니다.");
-        } else {
-          await localLogIn();
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
+      await localLogIn();
+      window.location.reload();
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 

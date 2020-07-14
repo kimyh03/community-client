@@ -5,13 +5,16 @@ export const defaults = {
 export const resolvers = {
   Mutation: {
     logUserIn: (_, { token }, { cache }) => {
-      localStorage.setItem("X-JWT", token);
-      window.location.href = "http://localhost:3000/";
-      cache.writeData({
-        data: {
-          isLoggedIn: true
-        }
-      });
+      if (token) {
+        localStorage.setItem("X-JWT", token);
+        cache.writeData({
+          data: {
+            isLoggedIn: true
+          }
+        });
+      } else {
+        throw new Error(" 아이디 혹은 비밀번호가 일치하지 않습니다.");
+      }
       return null;
     },
     logUserOut: (_, __, { cache }) => {

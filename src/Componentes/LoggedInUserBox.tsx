@@ -10,15 +10,23 @@ interface User {
   nickname: string;
 }
 
+interface GetMeData {
+  ok: boolean;
+  user: User;
+}
+
 interface GetMeResponse {
-  getMe: User;
+  getMe: GetMeData;
 }
 
 const GET_ME = gql`
   {
     getMe {
-      id
-      nickname
+      ok
+      user {
+        id
+        nickname
+      }
     }
   }
 `;
@@ -103,30 +111,49 @@ const LoggedInUserBox: React.FunctionComponent = () => {
       console.log(error.message);
     }
   };
-
-  return (
-    <>
-      <Title>
-        <CarrotText text="내정보" />
-      </Title>
-      <Container>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <Wrapper>
-              <Nickname>{`${data?.getMe.nickname}`}</Nickname>
-              <Greeting> 님 안녕하세요!</Greeting>
-            </Wrapper>
-            <SLink href={`/user/${data?.getMe.nickname}`}>
-              <Button>내피드</Button>
-            </SLink>
-            <AuthMenu onClick={onClick}>로그아웃</AuthMenu>
-          </>
-        )}
-      </Container>
-    </>
-  );
+  if (loading) {
+    return (
+      <>
+        <Title>
+          <CarrotText text="내정보" />
+        </Title>
+        <Container>
+          <Loader />;
+        </Container>
+      </>
+    );
+  } else if (!loading && data?.getMe.user) {
+    return (
+      <>
+        <Title>
+          <CarrotText text="내정보" />
+        </Title>
+        <Container>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <Wrapper>
+                <Nickname>{`${data?.getMe.user.nickname}`}</Nickname>
+                <Greeting> 님 안녕하세요!</Greeting>
+              </Wrapper>
+              <SLink href={`/user/${data?.getMe.user.nickname}`}>
+                <Button>내피드</Button>
+              </SLink>
+              <AuthMenu onClick={onClick}>로그아웃</AuthMenu>
+            </>
+          )}
+        </Container>
+      </>
+    );
+  } else
+    return (
+      <>
+        <Title>
+          <CarrotText text="내정보" />
+        </Title>
+      </>
+    );
 };
 
 export default LoggedInUserBox;
