@@ -73,26 +73,30 @@ export default withRouter(
   }) => {
     const [time, setTime] = useState(1);
     const [loadMore, setLoadMore] = useState(false);
+    const [stopFetch, setStopFetch] = useState(false);
     const [postList, setPostList] = useState<null | any>([]);
     const [searchPost, { loading, data }] = useLazyQuery<SearchPostResponse>(
       SEARCH_POST,
       {
-        variables: { term, time }
+        variables: { term, time },
+        // tslint:disable-next-line: no-shadowed-variable
+        onCompleted: (data) => {
+          if (!data.searchPost.posts) {
+            setStopFetch(true);
+          } else {
+            setStopFetch(false);
+            setPostList([...postList, ...data.searchPost.posts]);
+          }
+        }
       }
     );
 
     const fetchData = async () => {
-      setTime(time + 1);
-      await searchPost();
-      setLoadMore(false);
-      if (
-        !loading &&
-        data?.searchPost &&
-        data?.searchPost.posts &&
-        data?.searchPost.posts.length > 0
-      ) {
-        setPostList([...postList, ...data?.searchPost.posts]);
-      }
+      if (stopFetch === false) {
+        setTime(time + 1);
+        await searchPost();
+        setLoadMore(false);
+      } else return;
     };
 
     const handleScroll = () => {
@@ -101,19 +105,11 @@ export default withRouter(
         document.documentElement.offsetHeight
       ) {
         setLoadMore(true);
-      } else return;
+      }
     };
 
     const firstFetch = async () => {
       await searchPost();
-      if (
-        !loading &&
-        data?.searchPost &&
-        data?.searchPost.posts &&
-        data?.searchPost.posts.length > 0
-      ) {
-        await setPostList([...data?.searchPost.posts]);
-      }
     };
 
     useEffect(() => {
@@ -122,7 +118,9 @@ export default withRouter(
     }, []);
 
     useEffect(() => {
-      window.addEventListener("scroll", handleScroll);
+      if (stopFetch === false) {
+        window.addEventListener("scroll", handleScroll);
+      }
       return () => window.removeEventListener("scroll", handleScroll);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -133,15 +131,15 @@ export default withRouter(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadMore]);
 
+    const onClick = () => {
+      console.log(postList, data?.searchPost.posts);
+    };
+
     if (loading) return <Loader />;
-    else if (
-      !loading &&
-      data?.searchPost &&
-      data?.searchPost.posts &&
-      postList.length > 0
-    ) {
+    else if (!loading && postList.length > 0) {
       return (
         <>
+          <button onClick={onClick}></button>
           <SearchTerm>검색어 : {term}</SearchTerm>
           <Container>
             <PostCoulmn />
@@ -162,13 +160,14 @@ export default withRouter(
           </Container>
         </>
       );
-    } else {
+    } else if (!loading && postList.length === 0) {
       return (
         <>
+          <button onClick={onClick}></button>
           <SearchTerm>검색어 : {term}</SearchTerm>
           <NoPost>검색 결과가 없습니다.</NoPost>
         </>
       );
-    }
+    } else return <button onClick={onClick}></button>;
   }
 );
