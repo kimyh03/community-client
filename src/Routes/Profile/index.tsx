@@ -13,9 +13,8 @@ const PostContainer = styled.div`
   background: white;
   border: ${(props) => props.theme.boxBorder};
   border-radius: 7px;
-  height: 100%;
-  max-height: 650px;
-  margin-top: 100px;
+  min-height: 70%;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
 `;
@@ -163,7 +162,7 @@ export default withRouter(
                     onClick={onClick}
                     isClicked={value === "myPosts"}
                   >
-                    내가 쓴 글
+                    {`내가 쓴 글(${data?.getUserProfile.user.postCount})`}
                   </Button>
                   <Button
                     value={"bookmarkedPosts"}
@@ -180,7 +179,7 @@ export default withRouter(
                     onClick={onClick}
                     isClicked={value === "myPosts"}
                   >
-                    게시글
+                    {`게시글(${data?.getUserProfile.user.postCount})`}
                   </Button>
                 </ButtonContainer>
               )}
