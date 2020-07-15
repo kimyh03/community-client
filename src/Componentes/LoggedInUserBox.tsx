@@ -118,7 +118,7 @@ const LoggedInUserBox: React.FunctionComponent = () => {
           <CarrotText text="내정보" />
         </Title>
         <Container>
-          <Loader />;
+          <Loader />
         </Container>
       </>
     );

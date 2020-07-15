@@ -60,7 +60,7 @@ const PostList: React.FunctionComponent<IProps> = (props) => (
       <Item>{`(${props.commentCount})`}</Item>
     </CoulmnItemLarge>
     <CoulmnItemMiddle>
-      <Link to={`/user/${props.userName}`}>{props.userName}</Link>
+      <a href={`/user/${props.userName}`}>{props.userName}</a>
     </CoulmnItemMiddle>
     <CoulmnItemMiddle>{props.createdAt.substring(0, 10)}</CoulmnItemMiddle>
     <CoulmnItemSmall>{props.viewCount}</CoulmnItemSmall>

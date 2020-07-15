@@ -199,9 +199,9 @@ const PostCard: React.FunctionComponent<IProps> = (props) => {
         <Wrapper>
           <MainCoulmn>
             <Row>
-              <Link to={`/user/${props.userName}`}>
+              <a href={`/user/${props.userName}`}>
                 <Username>{props.userName}</Username>
-              </Link>
+              </a>
             </Row>
             <Row>
               <CreatedAt>{props.createdAt.substring(0, 10)}</CreatedAt>
